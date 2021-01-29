@@ -5,6 +5,7 @@
 #include <PubSubClient.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include <Wire.h>
 
 #define WIFISSID "roboticswifi" // Put your WifiSSID here
 #define PASSWORD "scil3ehawk" // Put your wifi password here
@@ -100,12 +101,13 @@ void loop() {
   
   float sensor = analogRead(SENSOR); 
   
+  
   /* 4 is mininum width, 2 is precision; float value is copied onto str_sensor*/
-  dtostrf(sensor, 4, 2, str_sensor);
+  dtostrf(temperatureF, 4, 2, str_sensor);
   
   sprintf(payload, "%s {\"value\": %s}}", payload, str_sensor); // Adds the value
   Serial.println("Publishing data to Ubidots Cloud");
   client.publish(topic, payload);
   client.loop();
-  delay(1000);
+  delay(30000); //30 seconds
 }
